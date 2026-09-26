@@ -24,13 +24,13 @@ main{max-width:1000px;margin:25px auto;padding:0 15px}.card{background:#fffffff2
 <div><label>Birth Date / பிறந்த தேதி</label><input id="date" type="date"></div>
 <div><label>Birth Time / பிறந்த நேரம்</label><input id="time" type="time"></div>
 <div><label>AM / PM</label><select id="ampm"><option>AM</option><option>PM</option></select></div>
-<div style="grid-column:1/-1"><label>Birth Place / பிறந்த இடம்</label><div class="place"><input id="place" placeholder="Type village / town / city"><button class="search" onclick="searchPlace()">🔎 Search Place</button></div><div id="status" class="status">Example: Anthiyur, Erode, Tamil Nadu</div><div id="results" class="results"></div></div>
+<div style="grid-column:1/-1"><label>Birth Place / பிறந்த இடம்</label><div class="place"><input id="place" placeholder="Type village / town / city"><button type="button" class="search" onclick="searchPlace()">🔎 Search Place</button></div><div id="status" class="status">Example: Anthiyur, Erode, Tamil Nadu</div><div id="results" class="results"></div></div>
 <div><label>Latitude</label><input id="lat" readonly placeholder="Auto filled"></div>
 <div><label>Longitude</label><input id="lon" readonly placeholder="Auto filled"></div>
 <div><label>Time Zone</label><input value="Asia/Kolkata (UTC+05:30)" readonly></div>
 <div><label>Ayanamsa</label><input value="Lahiri (Chitrapaksha)" readonly></div>
 </div>
-<div class="actions"><button class="generate" onclick="generateJathagam()">🔮 Generate Jathagam / ஜாதகம் கணிக்க</button><button onclick="saveDetails()">💾 Save Details</button></div>
+<div class="actions"><button type="button" class="generate" onclick="generateJathagam()">🔮 Generate Jathagam / ஜாதகம் கணிக்க</button><button type="button" onclick="saveDetails()">💾 Save Details</button></div>
 <div id="genStatus" class="status"></div>
 </section>
 <section class="card" id="rasi"><h2>Rasi / Lagna / Nakshatra</h2><div class="placeholder">Rasi calculation module</div></section>
@@ -44,7 +44,9 @@ import * as Astronomy from "https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19
 async function searchPlace(){const q=document.getElementById('place').value.trim(),box=document.getElementById('results'),status=document.getElementById('status');if(!q){status.textContent='Please enter a birth place.';return}status.textContent='Searching place...';box.innerHTML='';box.style.display='none';try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&addressdetails=1&accept-language=en&q='+encodeURIComponent(q),{headers:{Accept:'application/json'}});if(!r.ok)throw Error();const data=await r.json();if(!data.length){status.textContent='Place not found. Try adding district or state.';return}data.forEach(x=>{const d=document.createElement('div');d.className='result';d.innerHTML='<b>'+esc(x.display_name)+'</b><div class="small">Latitude: '+x.lat+' | Longitude: '+x.lon+'</div>';d.onclick=()=>{document.getElementById('place').value=x.display_name;document.getElementById('lat').value=Number(x.lat).toFixed(6);document.getElementById('lon').value=Number(x.lon).toFixed(6);box.style.display='none';status.textContent='✓ Location selected. Latitude and Longitude filled automatically.'};box.appendChild(d)});box.style.display='block';status.textContent='Select the correct place from the results.'}catch(e){status.textContent='Unable to search now. Check internet and try again.'}}
 function esc(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 document.getElementById('place').addEventListener('keydown',e=>{if(e.key==='Enter')searchPlace()});
+window.searchPlace=searchPlace;
 function saveDetails(){localStorage.setItem('adhityaBirthDetails',JSON.stringify({name:name.value,date:date.value,time:time.value,ampm:ampm.value,place:place.value,lat:lat.value,lon:lon.value}));alert('Birth details saved successfully.')}
+window.saveDetails=saveDetails;
 function norm360(x){return ((x%360)+360)%360}
 function zodiacSign(lon){return Math.floor(norm360(lon)/30)}
 const signsEn=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
@@ -127,4 +129,5 @@ async function generateJathagam(){
     document.getElementById('rasi').scrollIntoView({behavior:'smooth'});
   }catch(e){console.error(e);gen.textContent='Calculation error. Please check the birth date, time and place coordinates.';}
 }
+window.generateJathagam=generateJathagam;
 </script></body></html>
