@@ -7,7 +7,7 @@ body{margin:0;font-family:Arial,"Noto Sans Tamil",sans-serif;background:linear-g
 header{background:linear-gradient(90deg,#176b3a,#0d542d);color:white;text-align:center;padding:18px 15px;border-bottom:6px solid #f6d84a}
 .hero{display:flex;align-items:center;justify-content:center;gap:20px;max-width:1050px;margin:auto}.hero img{width:100px;height:125px;object-fit:cover;border-radius:14px;border:3px solid #f6d84a;background:white}.hero h1{margin:0;font-size:30px}.hero p{margin:7px 0 0}
 nav{background:white;text-align:center;padding:12px;box-shadow:0 2px 8px #0002;position:sticky;top:0;z-index:5}nav a{display:inline-block;margin:0 7px;color:#176b3a;font-weight:bold;text-decoration:none;padding:8px 12px;border-radius:18px}nav a:hover{background:#eef7d9}.home{background:#176b3a;color:white!important}
-main{max-width:1000px;margin:25px auto;padding:0 15px}.card{background:#fffffff2;border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:0 4px 16px #0002}h2{color:#176b3a}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{display:block;font-weight:bold;margin-bottom:5px}input,select{width:100%;padding:11px;border:1px solid #b9c9a0;border-radius:8px;box-sizing:border-box}.place{display:flex;gap:8px}.place input{flex:1}button{padding:11px 16px;border:0;border-radius:8px;font-weight:bold;cursor:pointer;background:#176b3a;color:white}.search{background:#f6d84a;color:#17351f}.generate{background:#176b3a;font-size:16px}.results{display:none;margin-top:8px;border:1px solid #ccd9bb;border-radius:8px;background:white}.result{padding:11px;border-bottom:1px solid #e5ecd9;cursor:pointer}.result:hover{background:#f1f8df}.small{font-size:12px;color:#666;margin-top:3px}.status{font-size:13px;color:#555;margin-top:7px}.actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}.placeholder{padding:35px;text-align:center;background:#f5fae9;border-radius:10px}footer{text-align:center;background:#176b3a;color:white;padding:20px}
+main{max-width:1000px;margin:25px auto;padding:0 15px}.card{background:#fffffff2;border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:0 4px 16px #0002}h2{color:#176b3a}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{display:block;font-weight:bold;margin-bottom:5px}input,select{width:100%;padding:11px;border:1px solid #b9c9a0;border-radius:8px;box-sizing:border-box}.place{display:flex;gap:8px}.place input{flex:1}button{padding:11px 16px;border:0;border-radius:8px;font-weight:bold;cursor:pointer;background:#176b3a;color:white}.search{background:#f6d84a;color:#17351f}.generate{background:#176b3a;font-size:16px}.results{display:none;margin-top:8px;border:1px solid #ccd9bb;border-radius:8px;background:white}.result{padding:11px;border-bottom:1px solid #e5ecd9;cursor:pointer}.result:hover{background:#f1f8df}.small{font-size:12px;color:#666;margin-top:3px}.status{font-size:13px;color:#555;margin-top:7px}.actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}.placeholder{padding:35px;text-align:center;background:#f5fae9;border-radius:10px}.tablewrap{overflow:auto}.planet-table{width:100%;border-collapse:collapse;margin-top:10px}.planet-table th,.planet-table td{border:1px solid #d8e4c9;padding:9px;text-align:left;white-space:nowrap}.planet-table th{background:#176b3a;color:#fff}.planet-table tr:nth-child(even){background:#f7fbeF}.chart-wrap{display:flex;justify-content:center}.rasi-chart{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,100px);max-width:700px;width:100%;border:3px solid #176b3a;background:#fff}.rasi-cell{border:1px solid #6d8b70;padding:6px;position:relative;background:#fffef0}.rasi-cell .sign{font-weight:bold;color:#176b3a;font-size:13px}.rasi-cell .items{margin-top:5px;font-size:12px;line-height:1.35}.rasi-center{grid-column:2/4;grid-row:2/4;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:bold;color:#176b3a;background:#f5fae9}.badge{display:inline-block;padding:4px 8px;border-radius:12px;background:#f6d84a;color:#17351f;font-weight:bold;margin:3px}.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.summary-box{background:#f5fae9;border-radius:10px;padding:12px}.summary-box b{display:block;color:#176b3a;margin-bottom:4px}@media(max-width:700px){.summary-grid{grid-template-columns:1fr}.rasi-chart{grid-template-rows:repeat(4,80px)}}footer{text-align:center;background:#176b3a;color:white;padding:20px}
 @media(max-width:700px){.grid{grid-template-columns:1fr}.place{flex-direction:column}.hero{flex-direction:column}.hero img{width:90px;height:110px}.hero h1{font-size:24px}}
 </style></head>
 <body>
@@ -38,10 +38,93 @@ main{max-width:1000px;margin:25px auto;padding:0 15px}.card{background:#fffffff2
 <section class="card" id="dasa"><h2>Dasa–Bhukti</h2><div class="placeholder">Dasa–Bhukti calculation module</div></section>
 <section class="card" id="reports"><h2>Reports</h2><div class="placeholder">Astrology reports</div></section>
 </main><footer>Designed &amp; Developed by Yuvaraj</footer>
-<script>
+<script type="module">
+import * as Astronomy from "https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/+esm";
+
 async function searchPlace(){const q=document.getElementById('place').value.trim(),box=document.getElementById('results'),status=document.getElementById('status');if(!q){status.textContent='Please enter a birth place.';return}status.textContent='Searching place...';box.innerHTML='';box.style.display='none';try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&addressdetails=1&accept-language=en&q='+encodeURIComponent(q),{headers:{Accept:'application/json'}});if(!r.ok)throw Error();const data=await r.json();if(!data.length){status.textContent='Place not found. Try adding district or state.';return}data.forEach(x=>{const d=document.createElement('div');d.className='result';d.innerHTML='<b>'+esc(x.display_name)+'</b><div class="small">Latitude: '+x.lat+' | Longitude: '+x.lon+'</div>';d.onclick=()=>{document.getElementById('place').value=x.display_name;document.getElementById('lat').value=Number(x.lat).toFixed(6);document.getElementById('lon').value=Number(x.lon).toFixed(6);box.style.display='none';status.textContent='✓ Location selected. Latitude and Longitude filled automatically.'};box.appendChild(d)});box.style.display='block';status.textContent='Select the correct place from the results.'}catch(e){status.textContent='Unable to search now. Check internet and try again.'}}
 function esc(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 document.getElementById('place').addEventListener('keydown',e=>{if(e.key==='Enter')searchPlace()});
 function saveDetails(){localStorage.setItem('adhityaBirthDetails',JSON.stringify({name:name.value,date:date.value,time:time.value,ampm:ampm.value,place:place.value,lat:lat.value,lon:lon.value}));alert('Birth details saved successfully.')}
-function generateJathagam(){if(!name.value||!date.value||!time.value||!place.value||!lat.value||!lon.value){document.getElementById('genStatus').textContent='Please complete Name, Date, Time and select Birth Place so Latitude/Longitude are filled.';return}document.getElementById('genStatus').textContent='✓ Birth details accepted. Jathagam calculation section is ready.';document.getElementById('rasi').scrollIntoView({behavior:'smooth'});}
+function norm360(x){return ((x%360)+360)%360}
+function zodiacSign(lon){return Math.floor(norm360(lon)/30)}
+const signsEn=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+const signsTa=['மேஷம்','ரிஷபம்','மிதுனம்','கடகம்','சிம்மம்','கன்னி','துலாம்','விருச்சிகம்','தனுசு','மகரம்','கும்பம்','மீனம்'];
+const nakshatras=['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
+const planets=[['Sun','சூரியன்',Astronomy.Body.Sun],['Moon','சந்திரன்',Astronomy.Body.Moon],['Mars','செவ்வாய்',Astronomy.Body.Mars],['Mercury','புதன்',Astronomy.Body.Mercury],['Jupiter','குரு',Astronomy.Body.Jupiter],['Venus','சுக்கிரன்',Astronomy.Body.Venus],['Saturn','சனி',Astronomy.Body.Saturn],['Uranus','யுரேனஸ்',Astronomy.Body.Uranus],['Neptune','நெப்டியூன்',Astronomy.Body.Neptune],['Pluto','புளூட்டோ',Astronomy.Body.Pluto]];
+function lahiriAyanamsa(date){
+  const y=date.getUTCFullYear();
+  const start=new Date(Date.UTC(y,0,1));
+  const frac=(date-start)/31557600000;
+  const years=(y+frac)-1900;
+  return 22+27/60+55/3600 + (50.29/3600)*years;
+}
+function localSiderealRadians(date,longitude){
+  const gst=Astronomy.SiderealTime(date);
+  const deg=norm360(gst*15+longitude);
+  return deg*Math.PI/180;
+}
+function ascendantTropical(date,latitude,longitude){
+  const lst=localSiderealRadians(date,longitude);
+  const eps=Astronomy.e_tilt(new Astronomy.AstroTime(date)).tobl*Math.PI/180;
+  const phi=latitude*Math.PI/180;
+  const x=Math.sin(lst)*Math.cos(eps)+Math.tan(phi)*Math.sin(eps);
+  const y=-Math.cos(lst);
+  let a=Math.atan2(y,x)*180/Math.PI;
+  a=norm360(a);
+  if(a<180)a+=180;else a-=180;
+  return norm360(a);
+}
+function formatDMS(deg){
+  const d=norm360(deg); const di=Math.floor(d); const m0=(d-di)*60; const mi=Math.floor(m0); const se=Math.round((m0-mi)*60); return `${di}° ${mi.toString().padStart(2,'0')}′ ${se.toString().padStart(2,'0')}″`;
+}
+function nakshatraInfo(lon){
+  const n=norm360(lon)/(360/27); const idx=Math.floor(n); const within=n-idx; const pada=Math.floor(within*4)+1; return {name:nakshatras[idx],pada};
+}
+function meanNode(date){
+  const jd=2451545 + (date.getTime()-Date.UTC(2000,0,1,12,0,0))/86400000;
+  const T=(jd-2451545)/36525;
+  return norm360(125.04452-1934.136261*T+0.0020708*T*T+(T*T*T)/450000);
+}
+function planetHouse(sign,ascSign){return ((sign-ascSign+12)%12)+1}
+function makeRasiChart(items,ascSign){
+  const pos={}; items.forEach(it=>{(pos[it.sign]??=[]).push(it.label+(it.isAsc?' (Lagna)':''));});
+  const cells=[0,1,2,3,11,null,null,4,10,null,null,5,9,8,7,6];
+  return '<div class="rasi-chart">'+cells.map((sg,i)=>{if(sg===null)return '<div class="rasi-center">🦚<br>ராசி கட்டம்<br>Rasi Chart</div>';return `<div class="rasi-cell"><div class="sign">${signsTa[sg]}<br>${signsEn[sg]}</div><div class="items">${(pos[sg]||[]).map(x=>'<div>'+esc(x)+'</div>').join('')}</div></div>`}).join('')+'</div>';
+}
+async function generateJathagam(){
+  const gen=document.getElementById('genStatus');
+  if(!name.value||!date.value||!time.value||!place.value||!lat.value||!lon.value){gen.textContent='Please complete Name, Date, Time and select Birth Place so Latitude/Longitude are filled.';return}
+  try{
+    gen.textContent='⏳ Calculating Rasi, Lagna and Planet Positions...';
+    const [yy,mm,dd]=date.value.split('-').map(Number);
+    let [hh,mi]=time.value.split(':').map(Number);
+    if(ampm.value==='PM' && hh<12) hh+=12;
+    if(ampm.value==='AM' && hh===12) hh=0;
+    const utcMs=Date.UTC(yy,mm-1,dd,hh,mi)-5.5*3600000;
+    const birth=new Date(utcMs);
+    const latitude=Number(lat.value), longitude=Number(lon.value);
+    if(!Number.isFinite(latitude)||!Number.isFinite(longitude)) throw Error('Invalid coordinates');
+    const ayan=lahiriAyanamsa(birth);
+    const ascSid=norm360(ascendantTropical(birth,latitude,longitude)-ayan);
+    const ascSign=zodiacSign(ascSid);
+    const rows=[];
+    for(const [en,ta,body] of planets){
+      const tropical=norm360(Astronomy.EclipticLongitude(body,birth));
+      const sid=norm360(tropical-ayan);
+      const speed1=norm360(Astronomy.EclipticLongitude(body,new Date(birth.getTime()+86400000)));
+      let delta=speed1-tropical;if(delta>180)delta-=360;if(delta<-180)delta+=360;
+      const ni=nakshatraInfo(sid);
+      rows.push({en,ta,lon:sid,sign:zodiacSign(sid),degree:sid%30,nak:ni.name,pada:ni.pada,retro:delta<0});
+    }
+    const rahu=meanNode(birth), ketu=norm360(rahu+180);
+    for(const [en,ta,sid] of [['Rahu','ராகு',rahu],['Ketu','கேது',ketu]]){const ni=nakshatraInfo(sid);rows.push({en,ta,lon:sid,sign:zodiacSign(sid),degree:sid%30,nak:ni.name,pada:ni.pada,retro:false,node:true});}
+    const moon=rows.find(r=>r.en==='Moon');
+    document.getElementById('rasi').innerHTML='<h2>Rasi / Lagna / Nakshatra</h2><div class="summary-grid"><div class="summary-box"><b>Lagna / லக்னம்</b>'+signsTa[ascSign]+' • '+signsEn[ascSign]+'<br>'+formatDMS(ascSid)+'</div><div class="summary-box"><b>Janma Rasi / ராசி</b>'+signsTa[moon.sign]+' • '+signsEn[moon.sign]+'</div><div class="summary-box"><b>Janma Nakshatra / நட்சத்திரம்</b>'+moon.nak+' • Pada '+moon.pada+'</div><div class="summary-box"><b>Lahiri Ayanamsa</b>'+formatDMS(ayan)+'</div><div class="summary-box"><b>Birth UTC</b>'+birth.toISOString().replace('T',' ').replace('.000Z',' UTC')+'</div><div class="summary-box"><b>Ascendant Degree</b>'+formatDMS(ascSid)+'</div></div><div class="chart-wrap" style="margin-top:16px">'+makeRasiChart([{label:'Lagna',sign:ascSign,isAsc:true},...rows.map(r=>({label:r.en,sign:r.sign}))],ascSign)+'</div>';
+    document.getElementById('planets').innerHTML='<h2>Planet Positions / கிரக நிலைகள்</h2><div class="tablewrap"><table class="planet-table"><thead><tr><th>Planet</th><th>Sidereal Longitude</th><th>Rasi</th><th>Degree in Rasi</th><th>Nakshatra</th><th>Pada</th><th>House</th><th>Motion</th></tr></thead><tbody>'+rows.map(r=>`<tr><td><b>${r.en}</b><br>${r.ta}</td><td>${r.lon.toFixed(2)}°</td><td>${signsTa[r.sign]}<br>${signsEn[r.sign]}</td><td>${formatDMS(r.degree)}</td><td>${r.nak}</td><td>${r.pada}</td><td>${planetHouse(r.sign,ascSign)}</td><td>${r.node?'Node':(r.retro?'Retrograde':'Direct')}</td></tr>`).join('')+'</tbody></table></div><div class="status">System: Sidereal zodiac • Lahiri (Chitrapaksha) • Birth place coordinates used above.</div>';
+    document.getElementById('dasa').innerHTML='<h2>Dasa–Bhukti</h2><div class="placeholder">Vimshottari Dasa–Bhukti will be added in the next step. Moon Nakshatra is already calculated above.</div>';
+    document.getElementById('reports').innerHTML='<h2>Reports</h2><div class="placeholder">Basic Rasi and Planet Position report generated successfully.</div>';
+    gen.textContent='✓ Birth chart and planet positions generated successfully.';
+    document.getElementById('rasi').scrollIntoView({behavior:'smooth'});
+  }catch(e){console.error(e);gen.textContent='Calculation error. Please check the birth date, time and place coordinates.';}
+}
 </script></body></html>
